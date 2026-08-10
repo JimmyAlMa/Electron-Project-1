@@ -33,4 +33,23 @@ ipcMain.handle('open-file', async () => {
     return { canceled: false, filePath, content: dataFile}
 })
 
+ipcMain.handle('save-file', async (event, savedText) => {
+    const result = await dialog.showSaveDialog({
+        title: "Save your file",
+        defaultPath: 'new-file.txt',
+        filters: [
+            { name: 'Text File', extensions: ['txt']},
+            { name: 'JSON File', extensions: ['json']}
+        ]
+    })
+
+    if (result.canceled || !result.filePath) {
+        return { success: false, reason: 'User Canceled'}
+    }
+
+    fs.writeFileSync(result.filePath, savedText, 'utf-8')
+
+    return { success: true, filePath: result.filePath }
+})
+
 app.whenReady().then(createWindow)
