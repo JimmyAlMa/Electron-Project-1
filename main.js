@@ -16,4 +16,21 @@ function createWindow() {
     win.loadFile('index.html')
 }
 
+ipcMain.handle('open-file', async () => {
+    const result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ name: 'Text Files', extensions: ['txt', 'json'] }]
+    })
+
+    if (result.canceled || result.filePaths.length === 0) {
+        return { canceled: true }
+    }
+
+    const filePath = result.filePath[0]
+
+    const dataFile = fs.readFileSync(filePath, 'utf-8')
+
+    return { canceled: false, filePath, content: dataFile}
+})
+
 app.whenReady().then(createWindow)
