@@ -22,11 +22,11 @@ ipcMain.handle('open-file', async () => {
         filters: [{ name: 'Text Files', extensions: ['txt', 'json'] }]
     })
 
-    if (result.canceled || result.filePaths.length === 0) {
+    if (result.canceled || !result.filePaths ||result.filePaths.length === 0) {
         return { canceled: true }
     }
 
-    const filePath = result.filePath[0]
+    const filePath = result.filePaths[0]
 
     const dataFile = fs.readFileSync(filePath, 'utf-8')
 
