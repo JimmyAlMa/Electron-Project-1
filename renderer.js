@@ -24,3 +24,8 @@ saveButton.addEventListener('click', async () => {
         alert('File saved successfully')
     }
 })
+
+textArea.addEventListener('input', () => {
+    totalCharacter = textArea.value.length
+    totalCharacterText.innerText = `Total Character: ${totalCharacter}`
+})
